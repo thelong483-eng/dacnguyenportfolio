@@ -43,24 +43,48 @@
       if (!v || typeof v === "string") return v || "";
       return (portrait ? v.doc : v.ngang) || v.ngang || v.doc || "";
     };
-    var heroVid = document.createElement("video");
-    heroVid.muted = true; heroVid.loop = true; heroVid.autoplay = true;
-    heroVid.setAttribute("muted", ""); heroVid.setAttribute("playsinline", "");
-    heroMedia.appendChild(heroVid);
+    var curPortrait = window.innerHeight > window.innerWidth;
+    // Viết thẳng thuộc tính vào HTML: iOS và trình duyệt trong app (Zalo, Facebook)
+    // đọc autoplay/muted/playsinline lúc phân tích thẻ đáng tin hơn là gán bằng JS.
+    var heroPoster = pick(D.hero.poster, curPortrait);
+    heroMedia.innerHTML =
+      '<video autoplay muted loop playsinline webkit-playsinline x5-playsinline' +
+      ' disablepictureinpicture disableremoteplayback preload="auto"' +
+      (heroPoster ? ' poster="' + esc(heroPoster) + '"' : "") +
+      ' src="' + esc(pick(D.hero.video, curPortrait)) + '"></video>';
+    var heroVid = heroMedia.querySelector("video");
+    heroVid.muted = true; heroVid.defaultMuted = true;
     heroMedia.parentNode.classList.add("has-video");
-    var curPortrait = null;
-    var setHeroSrc = function () {
+
+    var tryPlay = function () {
+      if (reduceMotion || !heroVid.paused) return;
+      heroVid.muted = true;
+      var pr = heroVid.play(); if (pr && pr.catch) pr.catch(function () {});
+    };
+    // Khi trình duyệt chặn tự chạy (Zalo, iPhone tiết kiệm pin), chạy ngay ở lần chạm/cuộn đầu tiên.
+    var kick = function () {
+      tryPlay();
+      if (!heroVid.paused) ["touchstart", "touchend", "click", "scroll", "keydown"].forEach(function (ev) {
+        window.removeEventListener(ev, kick, true);
+      });
+    };
+    ["touchstart", "touchend", "click", "scroll", "keydown"].forEach(function (ev) {
+      window.addEventListener(ev, kick, { capture: true, passive: true });
+    });
+    ["loadedmetadata", "canplay"].forEach(function (ev) { heroVid.addEventListener(ev, tryPlay); });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) tryPlay(); });
+    window.addEventListener("pageshow", tryPlay);
+    tryPlay();
+
+    window.addEventListener("resize", function () {
       var portrait = window.innerHeight > window.innerWidth;
       if (portrait === curPortrait) return;
       curPortrait = portrait;
       var poster = pick(D.hero.poster, portrait);
       if (poster) heroVid.poster = poster;
       heroVid.src = pick(D.hero.video, portrait);
-      var pr = heroVid.play(); if (pr && pr.catch) pr.catch(function () {});
-    };
-    setHeroSrc();
-    window.addEventListener("resize", setHeroSrc);
-    if (reduceMotion) heroVid.addEventListener("loadeddata", function () { heroVid.pause(); });
+      tryPlay();
+    });
   } else {
     heroMedia.classList.add("placeholder");
   }
