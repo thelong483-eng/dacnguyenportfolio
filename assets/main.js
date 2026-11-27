@@ -133,8 +133,12 @@
       media += '<img class="thumb" alt="" loading="lazy" src="' + esc(src) + '"' + (yt ? ' data-yt="' + yt + '"' : "") + ">";
     }
     if (yt) {
-      media += '<a class="play" href="' + esc(p.youtube) + '" target="_blank" rel="noopener" data-yt="' + yt + '" aria-label="Phát video ' + esc(p.title) + '">' +
-        '<span class="play-ring">' + ICON_PLAY + '</span><span class="play-txt">Xem phim</span></a>';
+      // Trên web thật: nút <button> phát ngay trong khung, không thể chuyển trang.
+      // Chỉ khi không nhúng được (bản xem thử claude.ai) mới dùng link mở YouTube.
+      var playInner = '<span class="play-ring">' + ICON_PLAY + '</span><span class="play-txt">Xem phim</span>';
+      media += canEmbed
+        ? '<button type="button" class="play" data-yt="' + yt + '" aria-label="Phát video ' + esc(p.title) + '">' + playInner + "</button>"
+        : '<a class="play" href="' + esc(p.youtube) + '" target="_blank" rel="noopener" aria-label="Phát video ' + esc(p.title) + ' trên YouTube">' + playInner + "</a>";
     }
     var info = [p.client, p.year, p.role].filter(Boolean).map(esc).join(" · ");
     var full = p.youtube
@@ -169,8 +173,9 @@
   // Bấm "Xem phim": nhúng trình phát ngay trong khung (một video tại một thời điểm).
   var activeFrame = null;
   document.addEventListener("click", function (e) {
-    var a = e.target.closest("a.play");
-    if (!a || !canEmbed) return;
+    var t = e.target.nodeType === 1 ? e.target : e.target.parentNode;
+    var a = t && t.closest && t.closest("button.play[data-yt]");
+    if (!a) return;
     e.preventDefault();
     var frame = a.closest(".frame");
     if (activeFrame && activeFrame.el !== frame) {
@@ -180,9 +185,13 @@
     activeFrame = { el: frame, html: frame.innerHTML };
     frame.querySelectorAll("video").forEach(function (v) { v.pause(); });
     frame.classList.add("playing");
-    frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + a.getAttribute("data-yt") +
-      '?autoplay=1&rel=0&playsinline=1" title="' + esc(a.getAttribute("aria-label")) +
-      '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+    // youtube.com/embed + origin + referrerpolicy: Safari chặn cookie bên thứ ba nên bản
+    // nocookie dễ báo lỗi và chỉ còn nút "Xem trên YouTube"; YouTube cũng cần referrer hợp lệ.
+    frame.innerHTML = '<iframe src="https://www.youtube.com/embed/' + a.getAttribute("data-yt") +
+      "?autoplay=1&rel=0&playsinline=1&modestbranding=1&origin=" + encodeURIComponent(location.origin) +
+      '" title="' + esc(a.getAttribute("aria-label")) +
+      '" referrerpolicy="strict-origin-when-cross-origin"' +
+      ' allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share" allowfullscreen></iframe>';
   });
 
   /* ---------- Giới thiệu ---------- */
