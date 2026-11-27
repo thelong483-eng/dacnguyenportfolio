@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--HEAD START-->
+<title>Đắc Nguyễn — Videographer</title>
+<meta name="description" content="Đắc Nguyễn, videographer tại Hà Nội với hơn 10 năm kinh nghiệm: phim thương hiệu, sự kiện, du lịch, giới thiệu doanh nghiệp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@400;600;800&display=swap">
+<!--HEAD END-->
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<!--BODY START-->
+<header class="site-header" id="top-bar">
+  <div class="bar">
+    <a class="logo" href="#top" data-bind="logo">DAC.NGUYEN</a>
+    <nav class="nav" aria-label="Điều hướng chính">
+      <a href="#du-an">Dự án</a>
+      <a href="#gioi-thieu">Giới thiệu</a>
+      <a class="nav-cta" href="#lien-he">Liên hệ</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" aria-label="Giới thiệu nhanh">
+    <div class="hero-media" id="hero-media" aria-hidden="true"></div>
+    <div class="hero-shade" aria-hidden="true"></div>
+
+    <div class="viewfinder" aria-hidden="true">
+      <span class="vf-corner tl"></span><span class="vf-corner tr"></span>
+      <span class="vf-corner bl"></span><span class="vf-corner br"></span>
+      <span class="vf-label vf-rec"><i class="rec-dot"></i>REC</span>
+      <span class="vf-label vf-tc" id="timecode">TC 00:00:00:00</span>
+      <span class="vf-label vf-spec">4K · 25P · 16:9</span>
+      <span class="vf-label vf-city" data-bind="city"></span>
+    </div>
+
+    <div class="hero-content">
+      <p class="eyebrow" id="hero-eyebrow"></p>
+      <h1 class="hero-name">
+        <span class="ghost" data-bind="name.first"></span>
+        <span class="solid" data-bind="name.last"></span>
+      </h1>
+      <p class="hero-intro" id="hero-intro"></p>
+      <a class="btn-outline" href="#du-an" id="hero-cta">Xem dự án</a>
+    </div>
+  </section>
+
+  <!-- TUYÊN NGÔN -->
+  <section class="manifesto" aria-label="Tuyên ngôn">
+    <p class="manifesto-text" id="manifesto"></p>
+  </section>
+
+  <!-- KHÁCH HÀNG -->
+  <section class="clients" id="clients" aria-label="Khách hàng">
+    <div class="marquee"><div class="marquee-track" id="marquee-track"></div></div>
+  </section>
+
+  <!-- DỰ ÁN -->
+  <section class="work" id="du-an" aria-labelledby="work-title">
+    <div class="work-head">
+      <h2 id="work-title" class="section-title"></h2>
+    </div>
+    <div id="projects"></div>
+  </section>
+
+  <!-- GIỚI THIỆU -->
+  <section class="about" id="gioi-thieu" aria-labelledby="about-title">
+    <div class="about-photo" id="about-photo"></div>
+    <div class="about-body">
+      <h2 class="section-title" id="about-title"></h2>
+      <p class="about-text" id="about-text"></p>
+      <dl class="stats" id="about-stats"></dl>
+      <p class="services" id="about-services"></p>
+    </div>
+  </section>
+</main>
+
+<!-- LIÊN HỆ -->
+<footer class="contact" id="lien-he" aria-labelledby="contact-title">
+  <h2 class="contact-title" id="contact-title"></h2>
+  <div class="contact-grid" id="contact-grid"></div>
+  <div class="footer-bottom">
+    <span id="copyright"></span>
+    <a href="#top">Lên đầu trang ↑</a>
+  </div>
+</footer>
+<!--BODY END-->
+<script src="assets/content.js"></script>
+<script src="assets/main.js"></script>
+</body>
+</html>
