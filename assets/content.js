@@ -117,6 +117,7 @@ window.PORTFOLIO = {
     email: "darknguyen.skda@gmail.com",
     phone: "0919 623 455",
     phoneNote: "Gọi / Zalo",
+    zalo: "https://zalo.me/0919623455",
     socials: [
       { label: "Instagram", handle: "@dacnguyen1011", url: "https://www.instagram.com/dacnguyen1011/" },
       { label: "TikTok", handle: "Đắc Nguyễn", url: "https://www.tiktok.com/@dacnguyen.picklebal" },

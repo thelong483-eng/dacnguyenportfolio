@@ -461,6 +461,13 @@ em.hl { font-style: normal; color: var(--accent); }
   padding: 3px 8px; cursor: pointer;
 }
 .copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+.c-value a.zalo-btn {
+  border: 0;
+  background: var(--accent); color: var(--accent-ink);
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 4px 10px;
+}
+.c-value a.zalo-btn:hover { filter: brightness(1.08); }
 .footer-bottom {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
   border-top: 1px solid var(--line); padding-top: 20px;

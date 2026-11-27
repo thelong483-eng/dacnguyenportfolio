@@ -255,7 +255,8 @@
   $("contact-title").innerHTML = "<span>" + esc(C.title[0]) + '</span><span class="accent">' + esc(C.title[1]) + "</span>";
   var items = [
     { label: "Email", html: '<a href="mailto:' + esc(C.email) + '">' + esc(C.email) + "</a>", copy: C.email },
-    { label: C.phoneNote || "Điện thoại", html: '<a href="tel:' + esc(C.phone.replace(/\s+/g, "")) + '">' + esc(C.phone) + "</a>", copy: C.phone }
+    { label: C.phoneNote || "Điện thoại", html: '<a href="tel:' + esc(C.phone.replace(/\s+/g, "")) + '">' + esc(C.phone) + "</a>" +
+        (C.zalo ? '<a class="zalo-btn" href="' + esc(C.zalo) + '" target="_blank" rel="noopener">Nhắn Zalo ↗</a>' : ""), copy: C.phone }
   ].concat(C.socials.map(function (s) {
     return { label: s.label, html: s.url ? '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.handle) + "</a>" : esc(s.handle) };
   })).concat([{ label: "Khu vực", html: esc(D.city) }]);
@@ -272,8 +273,8 @@
     var text = b.getAttribute("data-copy");
     var done = function () { b.textContent = "Đã chép"; setTimeout(function () { b.textContent = "Sao chép"; }, 1600); };
     try {
-      navigator.clipboard.writeText(text).then(done, function () { selectText(b.previousElementSibling); });
-    } catch (err) { selectText(b.previousElementSibling); }
+      navigator.clipboard.writeText(text).then(done, function () { selectText(b.parentNode.querySelector("a") || b.previousElementSibling); });
+    } catch (err) { selectText(b.parentNode.querySelector("a") || b.previousElementSibling); }
   });
   function selectText(el) {
     var r = document.createRange(); r.selectNodeContents(el);
